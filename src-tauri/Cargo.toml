@@ -1,0 +1,28 @@
+[package]
+name = "clipster"
+version = "0.1.0"
+description = "Local YouTube clip harvester"
+authors = ["you"]
+edition = "2021"
+
+[lib]
+name = "clipster_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["protocol-asset"] }
+tauri-plugin-opener = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tokio = { version = "1", features = ["process", "fs", "io-util", "macros", "rt-multi-thread"] }
+anyhow = "1"
+dirs = "6"
+dotenvy = "0.15"
+log = "0.4"
+env_logger = "0.11"
+
