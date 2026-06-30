@@ -2,6 +2,12 @@
 
 Clipster is a local Tauri desktop app that takes a YouTube URL, downloads the video and captions, asks DeepSeek to find high-potential short-form clips, generates playable previews, then cuts the selected clips with ffmpeg.
 
+## Preview
+
+![Clipster app showing detected clips and playable previews](docs/images/clipster-app.png)
+
+![Clipster results showing scored hooks and reasons](docs/images/clipster-results.png)
+
 ## What It Does
 
 | Step | Tool |
