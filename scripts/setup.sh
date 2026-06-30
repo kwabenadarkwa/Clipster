@@ -46,14 +46,14 @@ log "Installing frontend dependencies"
 corepack enable >/dev/null 2>&1 || true
 pnpm install
 
-log "Setting up MediaPipe Python venv"
+log "Setting up face crop Python venv"
 PY312="/opt/homebrew/bin/python3.12"
 if [[ ! -x "$PY312" ]]; then
   PY312="$(brew --prefix python@3.12)/bin/python3.12"
 fi
 "$PY312" -m venv src-tauri/.venv
 src-tauri/.venv/bin/python -m pip install --upgrade pip
-src-tauri/.venv/bin/python -m pip install mediapipe numpy
+src-tauri/.venv/bin/python -m pip install opencv-contrib-python numpy
 
 log "Creating env template"
 if [[ ! -f src-tauri/.env ]]; then

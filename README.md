@@ -133,10 +133,10 @@ Install it:
 brew install python@3.12
 /opt/homebrew/bin/python3.12 -m venv src-tauri/.venv
 src-tauri/.venv/bin/python -m pip install --upgrade pip
-src-tauri/.venv/bin/python -m pip install mediapipe numpy
+src-tauri/.venv/bin/python -m pip install opencv-contrib-python numpy
 ```
 
-If MediaPipe is working, `RUST_LOG=debug` logs will show `mediapipe crop:` during final cutting.
+If face crop is working, `RUST_LOG=debug` logs will show `face crop:` during final cutting.
 
 ## Cached Re-analysis
 

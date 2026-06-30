@@ -2,7 +2,7 @@ import json
 import subprocess
 import sys
 
-import mediapipe as mp
+import cv2
 import numpy as np
 
 
@@ -65,6 +65,18 @@ def clamp(v, low, high):
     return max(low, min(v, high))
 
 
+def detect_face(image):
+    cascade = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4)
+    if len(faces) == 0:
+        return None
+    x, y, w, h = max(faces, key=lambda face: face[2] * face[3])
+    return x + w // 2, y + h // 2
+
+
 def main():
     if len(sys.argv) != 4:
         print("usage: face_crop.py <video> <start> <end>", file=sys.stderr)
@@ -75,17 +87,10 @@ def main():
     mid = timestamp((seconds(start) + seconds(end)) / 2)
     image = frame(video, mid, width, height)
 
-    detector = mp.solutions.face_detection.FaceDetection(
-        model_selection=1,
-        min_detection_confidence=0.45,
-    )
-    result = detector.process(image)
-    if not result.detections:
+    face = detect_face(image)
+    if face is None:
         return 3
-
-    box = result.detections[0].location_data.relative_bounding_box
-    face_cx = int((box.xmin + box.width / 2) * width)
-    face_cy = int((box.ymin + box.height / 2) * height)
+    face_cx, face_cy = face
 
     crop_w = min(width, int(height * 9 / 16))
     crop_h = min(height, int(crop_w * 16 / 9))

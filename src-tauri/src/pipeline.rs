@@ -311,8 +311,8 @@ pub async fn cut_clip(
     }
     let dur_str = fmt_ts(dur);
 
-    let crop_arg = if let Some(crop) = mediapipe_crop(video_path, clip).await {
-        info!("mediapipe crop: {}", crop);
+    let crop_arg = if let Some(crop) = face_crop(video_path, clip).await {
+        info!("face crop: {}", crop);
         crop
     } else {
         let detect = Command::new("ffmpeg")
@@ -361,7 +361,7 @@ pub async fn cut_clip(
     Ok(())
 }
 
-async fn mediapipe_crop(video_path: &Path, clip: &Clip) -> Option<String> {
+async fn face_crop(video_path: &Path, clip: &Clip) -> Option<String> {
     let script = face_crop_script()?;
     let python = face_crop_python().unwrap_or_else(|| PathBuf::from("python3"));
     let output = Command::new(python)
@@ -373,7 +373,7 @@ async fn mediapipe_crop(video_path: &Path, clip: &Clip) -> Option<String> {
         .await
         .ok()?;
     if !output.status.success() {
-        debug!("mediapipe crop unavailable: {}", String::from_utf8_lossy(&output.stderr));
+        debug!("face crop unavailable: {}", String::from_utf8_lossy(&output.stderr));
         return None;
     }
     let crop = String::from_utf8_lossy(&output.stdout).trim().to_string();
