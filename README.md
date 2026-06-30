@@ -10,7 +10,7 @@ Clipster is a local Tauri desktop app that takes a YouTube URL, downloads the vi
 | Fetch captions | YouTube auto-subs via `yt-dlp` |
 | Pick viral moments | DeepSeek chat API |
 | Generate previews | `ffmpeg` |
-| Final 9:16 clips | `ffmpeg` + optional MediaPipe face crop |
+| Final 9:16 clips | `ffmpeg` + optional OpenCV face crop |
 | Desktop UI | Tauri + React + TypeScript |
 
 ## Requirements
@@ -22,7 +22,7 @@ Clipster is a local Tauri desktop app that takes a YouTube URL, downloads the vi
 | ffmpeg | `brew install ffmpeg` |
 | yt-dlp | `brew install yt-dlp` |
 | DeepSeek API key | Put in `src-tauri/.env` |
-| Python 3.12 + MediaPipe | Optional, only needed for face crop |
+| Python 3.12 + OpenCV | Optional, only needed for face crop |
 
 ## Setup
 
@@ -47,7 +47,7 @@ The setup script installs/checks:
 | Rust | Yes, via rustup if missing |
 | pnpm dependencies | Yes |
 | Python 3.12 | Yes, via Homebrew |
-| MediaPipe venv | Yes, at `src-tauri/.venv` |
+| Face crop venv | Yes, at `src-tauri/.venv` |
 
 Then edit `src-tauri/.env`:
 
@@ -117,9 +117,9 @@ Find clips that would work for startup founders. Prefer contrarian business advi
 Look for emotional stories, conflict, or moments where the speaker changes their mind.
 ```
 
-## MediaPipe Face Crop
+## Face Crop
 
-Final clips try MediaPipe face crop first. If MediaPipe is unavailable, Clipster falls back to ffmpeg `cropdetect`.
+Final clips try OpenCV face crop first. If it is unavailable, Clipster falls back to ffmpeg `cropdetect`.
 
 This repo expects an optional venv at:
 
@@ -152,7 +152,7 @@ The source video is not copied into your output folder. Only final clips are exp
 | No captions found | Video has no YouTube captions. Pick another video or add Whisper fallback later. |
 | Preview does not play | Restart dev server and re-run analysis so previews regenerate. |
 | Final MP4 does not play | Re-cut clips. Output uses `yuv420p` + `faststart` for compatibility. |
-| MediaPipe not used | Install Python 3.12 venv dependencies above. |
+| Face crop not used | Install Python 3.12 venv dependencies above. |
 | DeepSeek error | Check `src-tauri/.env` has `DEEPSEEK_API_KEY=...`. |
 
 ## Useful Commands
